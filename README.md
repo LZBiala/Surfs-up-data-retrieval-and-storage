@@ -1,96 +1,136 @@
 # Surfs-up-data-retrieval-and-storage
 
 
-## Instructions
+# Surfs Up!
 
-* 1a. Display the first and last names of all actors from the table `actor`.
+![surfs-up.jpeg](Images/surfs-up.jpeg)
 
-* 1b. Display the first and last name of each actor in a single column in upper case letters. Name the column `Actor Name`.
+Congratulations! You've decided to treat yourself to a long holiday vacation in Honolulu, Hawaii! To help with your trip planning, you need to do some climate analysis on the area. The following outlines what you need to do.
 
-* 2a. You need to find the ID number, first name, and last name of an actor, of whom you know only the first name, "Joe." What is one query would you use to obtain this information?
+## Step 1 - Climate Analysis and Exploration
 
-* 2b. Find all actors whose last name contain the letters `GEN`:
+To begin, use Python and SQLAlchemy to do basic climate analysis and data exploration of your climate database. All of the following analysis should be completed using SQLAlchemy ORM queries, Pandas, and Matplotlib.
 
-* 2c. Find all actors whose last names contain the letters `LI`. This time, order the rows by last name and first name, in that order:
+* Use the provided [starter notebook](climate_starter.ipynb) and [hawaii.sqlite](Resources/hawaii.sqlite) files to complete your climate analysis and data exploration.
 
-* 2d. Using `IN`, display the `country_id` and `country` columns of the following countries: Afghanistan, Bangladesh, and China:
+* Choose a start date and end date for your trip. Make sure that your vacation range is approximately 3-15 days total.
 
-* 3a. You want to keep a description of each actor. You don't think you will be performing queries on a description, so create a column in the table `actor` named `description` and use the data type `BLOB` (Make sure to research the type `BLOB`, as the difference between it and `VARCHAR` are significant).
+* Use SQLAlchemy `create_engine` to connect to your sqlite database.
 
-* 3b. Very quickly you realize that entering descriptions for each actor is too much effort. Delete the `description` column.
+* Use SQLAlchemy `automap_base()` to reflect your tables into classes and save a reference to those classes called `Station` and `Measurement`.
 
-* 4a. List the last names of actors, as well as how many actors have that last name.
+### Precipitation Analysis
 
-* 4b. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
+* Design a query to retrieve the last 12 months of precipitation data.
 
-* 4c. The actor `HARPO WILLIAMS` was accidentally entered in the `actor` table as `GROUCHO WILLIAMS`. Write a query to fix the record.
+* Select only the `date` and `prcp` values.
 
-* 4d. Perhaps we were too hasty in changing `GROUCHO` to `HARPO`. It turns out that `GROUCHO` was the correct name after all! In a single query, if the first name of the actor is currently `HARPO`, change it to `GROUCHO`.
+* Load the query results into a Pandas DataFrame and set the index to the date column.
 
-* 5a. You cannot locate the schema of the `address` table. Which query would you use to re-create it?
+* Sort the DataFrame values by `date`.
 
-  * Hint: [https://dev.mysql.com/doc/refman/5.7/en/show-create-table.html](https://dev.mysql.com/doc/refman/5.7/en/show-create-table.html)
+* Plot the results using the DataFrame `plot` method.
 
-* 6a. Use `JOIN` to display the first and last names, as well as the address, of each staff member. Use the tables `staff` and `address`:
+  ![precipitation](Images/precipitation.png)
 
-* 6b. Use `JOIN` to display the total amount rung up by each staff member in August of 2005. Use tables `staff` and `payment`.
+* Use Pandas to print the summary statistics for the precipitation data.
 
-* 6c. List each film and the number of actors who are listed for that film. Use tables `film_actor` and `film`. Use inner join.
+### Station Analysis
 
-* 6d. How many copies of the film `Hunchback Impossible` exist in the inventory system?
+* Design a query to calculate the total number of stations.
 
-* 6e. Using the tables `payment` and `customer` and the `JOIN` command, list the total paid by each customer. List the customers alphabetically by last name:
+* Design a query to find the most active stations.
 
-  ![Total amount paid](Images/total_payment.png)
+  * List the stations and observation counts in descending order.
 
-* 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters `K` and `Q` have also soared in popularity. Use subqueries to display the titles of movies starting with the letters `K` and `Q` whose language is English.
+  * Which station has the highest number of observations?
 
-* 7b. Use subqueries to display all actors who appear in the film `Alone Trip`.
+  * Hint: You may need to use functions such as `func.min`, `func.max`, `func.avg`, and `func.count` in your queries.
 
-* 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+* Design a query to retrieve the last 12 months of temperature observation data (tobs).
 
-* 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as _family_ films.
+  * Filter by the station with the highest number of observations.
 
-* 7e. Display the most frequently rented movies in descending order.
+  * Plot the results as a histogram with `bins=12`.
 
-* 7f. Write a query to display how much business, in dollars, each store brought in.
+    ![station-histogram](Images/station-histogram.png)
 
-* 7g. Write a query to display for each store its store ID, city, and country.
+- - -
 
-* 7h. List the top five genres in gross revenue in descending order. (**Hint**: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
+## Step 2 - Climate App
 
-* 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
+Now that you have completed your initial analysis, design a Flask API based on the queries that you have just developed.
 
-* 8b. How would you display the view that you created in 8a?
+* Use FLASK to create your routes.
 
-* 8c. You find that you no longer need the view `top_five_genres`. Write a query to delete it.
+### Routes
 
-## Appendix: List of Tables in the Sakila DB
+* `/`
 
-* A schema is also available as `sakila_schema.svg`. Open it with a browser to view.
+  * Home page.
 
-```sql
-'actor'
-'actor_info'
-'address'
-'category'
-'city'
-'country'
-'customer'
-'customer_list'
-'film'
-'film_actor'
-'film_category'
-'film_list'
-'film_text'
-'inventory'
-'language'
-'nicer_but_slower_film_list'
-'payment'
-'rental'
-'sales_by_film_category'
-'sales_by_store'
-'staff'
-'staff_list'
-'store'
-```
+  * List all routes that are available.
+
+* `/api/v1.0/precipitation`
+
+  * Convert the query results to a Dictionary using `date` as the key and `prcp` as the value.
+
+  * Return the JSON representation of your dictionary.
+
+* `/api/v1.0/stations`
+
+  * Return a JSON list of stations from the dataset.
+
+* `/api/v1.0/tobs`
+  * query for the dates and temperature observations from a year from the last data point.
+  * Return a JSON list of Temperature Observations (tobs) for the previous year.
+
+* `/api/v1.0/<start>` and `/api/v1.0/<start>/<end>`
+
+  * Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
+
+  * When given the start only, calculate `TMIN`, `TAVG`, and `TMAX` for all dates greater than and equal to the start date.
+
+  * When given the start and the end date, calculate the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive.
+
+## Hints
+
+* You will need to join the station and measurement tables for some of the analysis queries.
+
+* Use Flask `jsonify` to convert your API data into a valid JSON response object.
+
+- - -
+
+### Optional: Other Recommended Analyses
+
+* The following are optional challenge queries. These are highly recommended to attempt, but not required for the homework.
+
+### Temperature Analysis
+
+* The starter notebook contains a function called `calc_temps` that will accept a start date and end date in the format `%Y-%m-%d` and return the minimum, average, and maximum temperatures for that range of dates.
+
+* Use the `calc_temps` function to calculate the min, avg, and max temperatures for your trip using the matching dates from the previous year (i.e., use "2017-01-01" if your trip start date was "2018-01-01").
+
+* Plot the min, avg, and max temperature from your previous query as a bar chart.
+
+  * Use the average temperature as the bar height.
+
+  * Use the peak-to-peak (tmax-tmin) value as the y error bar (yerr).
+
+    ![temperature](Images/temperature.png)
+
+### Daily Rainfall Average.
+
+* Calculate the rainfall per weather station using the previous year's matching dates.
+
+* Calculate the daily normals. Normals are the averages for the min, avg, and max temperatures.
+
+* You are provided with a function called `daily_normals` that will calculate the daily normals for a specific date. This date string will be in the format `%m-%d`. Be sure to use all historic tobs that match that date string.
+
+* Create a list of dates for your trip in the format `%m-%d`. Use the `daily_normals` function to calculate the normals for each date string and append the results to a list.
+
+* Load the list of daily normals into a Pandas DataFrame and set the index equal to the date.
+
+* Use Pandas to plot an area plot (`stacked=False`) for the daily normals.
+
+  ![daily-normals](Images/daily-normals.png)
